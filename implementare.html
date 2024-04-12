@@ -1,0 +1,63 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Depozit {
+    private List<Produs> produse;
+
+    public Depozit() {
+        this.produse = new ArrayList<>();
+    }
+
+    public void adaugaProdus(Produs produs) {
+        boolean exista = produse.stream().anyMatch(p -> p.getCod().equals(produs.getCod()));
+        if (exista) {
+            produse.stream().filter(p -> p.getCod().equals(produs.getCod())).findFirst().ifPresent(Produs::adaugaCantitate);
+        } else {
+            produse.add(produs);
+        }
+    }
+
+    public void tiparesteInventar() {
+        produse.forEach(Produs::tiparesteDetalii);
+    }
+}
+
+class Produs {
+    private String cod;
+    private String nume;
+    private double pretBaza;
+    private int cantitate;
+
+    public Produs(String cod, String nume, double pretBaza, int cantitate) {
+        this.cod = cod;
+        this.nume = nume;
+        this.pretBaza = pretBaza;
+        this.cantitate = cantitate;
+    }
+
+    public String getCod() {
+        return cod;
+    }
+
+    public void adaugaCantitate() {
+        this.cantitate++;
+    }
+
+    public void tiparesteDetalii() {
+        System.out.println("Cod: " + cod + ", Nume: " + nume + ", Preț: " + pretBaza + ", Cantitate: " + cantitate);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Depozit depozit = new Depozit();
+
+        Produs produs1 = new Produs("P1", "Produs 1", 10.0, 5);
+        Produs produs2 = new Produs("P2", "Produs 2", 20.0, 10);
+
+        depozit.adaugaProdus(produs1);
+        depozit.adaugaProdus(produs2);
+
+        depozit.tiparesteInventar();
+    }
+}
